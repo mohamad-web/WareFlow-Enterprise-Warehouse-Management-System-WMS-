@@ -1,0 +1,14 @@
+package com.wareflow.common.exception;
+
+public enum ErrorCode {
+
+    USER_NOT_FOUND,
+    ROLE_NOT_FOUND,
+    USERNAME_ALREADY_EXISTS,
+    EMAIL_ALREADY_EXISTS,
+    USER_MUST_HAVE_AT_LEAST_ONE_ROLE,
+
+    VALIDATION_FAILED,
+    MALFORMED_REQUEST,
+    INTERNAL_SERVER_ERROR
+}

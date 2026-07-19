@@ -19,6 +19,8 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
+import com.wareflow.user.exception.UserMustHaveAtLeastOneRoleException;
+
 @Entity
 @Table(name = "app_users")
 public class User {
@@ -162,9 +164,7 @@ public class User {
         Objects.requireNonNull(roles, "Roles must not be null");
 
         if (roles.isEmpty()) {
-            throw new IllegalArgumentException(
-                    "User must have at least one role"
-            );
+            throw new UserMustHaveAtLeastOneRoleException();
         }
 
         this.roles.forEach(role -> role.removeUser(this));
@@ -185,9 +185,7 @@ public class User {
         Objects.requireNonNull(role, "Role must not be null");
 
         if (roles.size() == 1 && roles.contains(role)) {
-            throw new IllegalStateException(
-                    "User must have at least one role"
-            );
+            throw new UserMustHaveAtLeastOneRoleException();
         }
 
         if (roles.remove(role)) {
