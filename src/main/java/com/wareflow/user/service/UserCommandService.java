@@ -1,8 +1,10 @@
-package com.wareflow.user;
+package com.wareflow.user.service;
 
 import com.wareflow.role.Role;
 import com.wareflow.role.RoleRepository;
 import com.wareflow.role.exception.RoleNotFoundException;
+import com.wareflow.user.User;
+import com.wareflow.user.UserRepository;
 import com.wareflow.user.dto.CreateUserRequest;
 import com.wareflow.user.dto.UserResponse;
 import com.wareflow.user.exception.EmailAlreadyExistsException;
@@ -21,14 +23,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-public class UserService {
+public class UserCommandService{
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
-    public UserService(
+    public UserCommandService(
             UserRepository userRepository,
             RoleRepository roleRepository,
             PasswordEncoder passwordEncoder,
