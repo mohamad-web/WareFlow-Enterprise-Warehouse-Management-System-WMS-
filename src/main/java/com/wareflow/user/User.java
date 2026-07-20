@@ -1,16 +1,11 @@
 package com.wareflow.user;
 
 import com.wareflow.role.Role;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -21,8 +16,10 @@ import java.util.Set;
 
 import com.wareflow.user.exception.UserMustHaveAtLeastOneRoleException;
 
+
 @Entity
 @Table(name = "app_users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
@@ -72,19 +69,12 @@ public class User {
     )
     private boolean active = true;
 
-    @Column(
-            name = "created_at",
-            nullable = false,
-            insertable = false,
-            updatable = false
-    )
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    @Column(
-            name = "updated_at",
-            nullable = false,
-            insertable = false
-    )
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
     @ManyToMany(fetch = FetchType.LAZY)
