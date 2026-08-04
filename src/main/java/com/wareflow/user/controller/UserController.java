@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import com.wareflow.user.dto.UpdateUserRequest;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import java.net.URI;
 
@@ -75,4 +77,17 @@ public class UserController {
 
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping("/{userId}")
+    public ResponseEntity<UserResponse> updateUser(
+            @PathVariable Long userId,
+            @Valid @RequestBody UpdateUserRequest request
+    ) {
+        UserResponse response =
+                userCommandService.updateUser(userId, request);
+
+        return ResponseEntity.ok(response);
+    }
+
+    
 }

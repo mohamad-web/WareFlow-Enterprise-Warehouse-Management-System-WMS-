@@ -13,6 +13,8 @@ import com.wareflow.user.mapper.UserMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.wareflow.user.dto.UpdateUserRequest;
+import com.wareflow.user.exception.UserNotFoundException;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -120,5 +122,54 @@ public class UserCommandService{
         return email
                 .trim()
                 .toLowerCase(Locale.ROOT);
+    }
+
+    @Transactional
+    public UserResponse updateUser(
+            Long userId,
+            UpdateUserRequest request
+    ) {
+        Objects.requireNonNull(
+                userId,
+                "User ID must not be null"
+        );
+
+        Objects.requireNonNull(
+                request,
+                "Update user request must not be null"
+        );
+
+        User user = userRepository.findWithRolesById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        String normalizedEmail = normalizeEmail(request.email());
+
+        validateEmailIsAvailableForUpdate(
+                normalizedEmail,
+                userId
+        );
+
+        Set<Role> roles = loadRoles(request.roleIds());
+
+        user.updateProfile(
+                request.firstName(),
+                request.lastName(),
+                normalizedEmail
+        );
+
+        user.assignRoles(roles);
+
+        User savedUser = userRepository.save(user);
+
+        return userMapper.toResponse(savedUser);
+    }
+
+    private void validateEmailIsAvailableForUpdate(
+            String email,
+            Long userId
+    ) {
+        if (userRepository.existsByEmailAndIdNot(email, userId)) {
+            throw new EmailAlreadyExistsException(email);
+        }
     }
 }
