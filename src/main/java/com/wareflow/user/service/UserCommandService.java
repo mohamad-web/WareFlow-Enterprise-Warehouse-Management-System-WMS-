@@ -172,4 +172,34 @@ public class UserCommandService{
             throw new EmailAlreadyExistsException(email);
         }
     }
+
+    @Transactional
+    public UserResponse deactivateUser(Long userId) {
+        Objects.requireNonNull(
+                userId,
+                "User ID must not be null"
+        );
+
+        User user = userRepository.findWithRolesById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        user.deactivate();
+
+        return userMapper.toResponse(user);
+    }
+
+    @Transactional
+    public UserResponse activateUser(Long userId) {
+        Objects.requireNonNull(
+                userId,
+                "User ID must not be null"
+        );
+
+        User user = userRepository.findWithRolesById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        user.activate();
+
+        return userMapper.toResponse(user);
+    }
 }

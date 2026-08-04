@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.wareflow.user.dto.UpdateUserRequest;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 
 import java.net.URI;
 
@@ -89,5 +90,24 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
-    
+    @PatchMapping("/{userId}/deactivate")
+    public ResponseEntity<UserResponse> deactivateUser(
+            @PathVariable Long userId
+    ) {
+        UserResponse response =
+                userCommandService.deactivateUser(userId);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/{userId}/activate")
+    public ResponseEntity<UserResponse> activateUser(
+            @PathVariable Long userId
+    ) {
+        UserResponse response =
+                userCommandService.activateUser(userId);
+
+        return ResponseEntity.ok(response);
+    }
+
 }
