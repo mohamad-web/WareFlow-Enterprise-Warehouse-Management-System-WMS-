@@ -4,6 +4,7 @@ import com.wareflow.user.dto.CreateUserRequest;
 import com.wareflow.user.dto.UserResponse;
 import com.wareflow.user.service.UserCommandService;
 import com.wareflow.user.service.UserQueryService;
+import com.wareflow.user.dto.ChangePasswordRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -110,4 +111,13 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @PatchMapping("/{userId}/password")
+    public ResponseEntity<Void> changePassword(
+            @PathVariable Long userId,
+            @Valid @RequestBody ChangePasswordRequest request
+    ) {
+        userCommandService.changePassword(userId, request);
+
+        return ResponseEntity.noContent().build();
+    }
 }

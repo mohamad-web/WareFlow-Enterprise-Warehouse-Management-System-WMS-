@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.wareflow.user.dto.UpdateUserRequest;
 import com.wareflow.user.exception.UserNotFoundException;
+import com.wareflow.user.dto.ChangePasswordRequest;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -201,5 +202,29 @@ public class UserCommandService{
         user.activate();
 
         return userMapper.toResponse(user);
+    }
+
+    @Transactional
+    public void changePassword(
+            Long userId,
+            ChangePasswordRequest request
+    ) {
+        Objects.requireNonNull(
+                userId,
+                "User ID must not be null"
+        );
+
+        Objects.requireNonNull(
+                request,
+                "Change password request must not be null"
+        );
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        String passwordHash =
+                passwordEncoder.encode(request.newPassword());
+
+        user.changePasswordHash(passwordHash);
     }
 }
