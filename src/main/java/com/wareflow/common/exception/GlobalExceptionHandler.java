@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.security.core.AuthenticationException;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -24,6 +25,24 @@ public class GlobalExceptionHandler {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiError> handleAuthenticationException(
+            AuthenticationException exception,
+            HttpServletRequest request
+    ) {
+        ApiError apiError = createApiError(
+                HttpStatus.UNAUTHORIZED,
+                ErrorCode.INVALID_CREDENTIALS,
+                "Invalid username or password",
+                request.getRequestURI(),
+                null
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(apiError);
+    }
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ApiError> handleApplicationException(
@@ -152,6 +171,9 @@ public class GlobalExceptionHandler {
 
             case USERNAME_ALREADY_EXISTS,
                  EMAIL_ALREADY_EXISTS -> HttpStatus.CONFLICT;
+
+            case INVALID_CREDENTIALS ->
+                    HttpStatus.UNAUTHORIZED;
 
             case USER_MUST_HAVE_AT_LEAST_ONE_ROLE,
                  VALIDATION_FAILED,

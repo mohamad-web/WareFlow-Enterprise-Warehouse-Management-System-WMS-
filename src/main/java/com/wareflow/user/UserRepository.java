@@ -22,7 +22,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @EntityGraph(attributePaths = "roles")
     Optional<User> findWithRolesById(Long id);
 
+    @EntityGraph(attributePaths = "roles")
+    Optional<User> findWithRolesByUsername(String username);
+
     @Override
     @EntityGraph(attributePaths = "roles")
     Page<User> findAll(Pageable pageable);
+
 }
