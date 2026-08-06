@@ -3,6 +3,7 @@ package com.wareflow.config;
 import com.wareflow.security.WareFlowUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -57,6 +58,33 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/v1/auth/login"
                         ).permitAll()
+
+                        .requestMatchers(
+                                "/api/v1/auth/me"
+                        ).authenticated()
+
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/users/**"
+                        ).hasAnyRole(
+                                "ADMIN",
+                                "WAREHOUSE_MANAGER"
+                        )
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/users/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/v1/users/**"
+                        ).hasRole("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/v1/users/**"
+                        ).hasRole("ADMIN")
 
                         .anyRequest().authenticated()
                 )

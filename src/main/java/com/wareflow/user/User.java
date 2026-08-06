@@ -157,18 +157,13 @@ public class User {
             throw new UserMustHaveAtLeastOneRoleException();
         }
 
-        this.roles.forEach(role -> role.removeUser(this));
         this.roles.clear();
-
-        roles.forEach(this::addRole);
+        this.roles.addAll(roles);
     }
 
     public void addRole(Role role) {
         Objects.requireNonNull(role, "Role must not be null");
-
-        if (roles.add(role)) {
-            role.addUser(this);
-        }
+        roles.add(role);
     }
 
     public void removeRole(Role role) {
@@ -178,9 +173,7 @@ public class User {
             throw new UserMustHaveAtLeastOneRoleException();
         }
 
-        if (roles.remove(role)) {
-            role.removeUser(this);
-        }
+        roles.remove(role);
     }
 
     public void updateProfile(
