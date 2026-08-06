@@ -172,8 +172,10 @@ public class GlobalExceptionHandler {
             case USERNAME_ALREADY_EXISTS,
                  EMAIL_ALREADY_EXISTS -> HttpStatus.CONFLICT;
 
-            case INVALID_CREDENTIALS ->
-                    HttpStatus.UNAUTHORIZED;
+            case INVALID_CREDENTIALS,
+                 AUTHENTICATION_REQUIRED -> HttpStatus.UNAUTHORIZED;
+
+            case ACCESS_DENIED -> HttpStatus.FORBIDDEN;
 
             case USER_MUST_HAVE_AT_LEAST_ONE_ROLE,
                  VALIDATION_FAILED,
