@@ -30,7 +30,7 @@ public class AdminBootstrapService {
 
     @Transactional
     public void createAdminIfMissing() {
-        String username = "admin";
+        String username = "admin2";
 
         if (userRepository.existsByUsername(username)) {
             return;
@@ -46,10 +46,10 @@ public class AdminBootstrapService {
 
         User admin = new User(
                 username,
-                passwordEncoder.encode("ChangeMeImmediately123!"),
+                passwordEncoder.encode("AdminSecondPassword123!"),
                 "System",
-                "Administrator",
-                "admin@wareflow.local"
+                "Administrator Two",
+                "admin2@wareflow.local"
         );
 
         admin.assignRoles(new HashSet<>(roles));

@@ -166,23 +166,31 @@ public class GlobalExceptionHandler {
 
     private HttpStatus resolveStatus(ErrorCode errorCode) {
         return switch (errorCode) {
+
             case USER_NOT_FOUND,
-                 ROLE_NOT_FOUND -> HttpStatus.NOT_FOUND;
+                 ROLE_NOT_FOUND,
+                 WAREHOUSE_NOT_FOUND
+                    -> HttpStatus.NOT_FOUND;
 
             case USERNAME_ALREADY_EXISTS,
-                 EMAIL_ALREADY_EXISTS -> HttpStatus.CONFLICT;
+                 EMAIL_ALREADY_EXISTS,
+                 WAREHOUSE_CODE_ALREADY_EXISTS
+                    -> HttpStatus.CONFLICT;
 
             case INVALID_CREDENTIALS,
-                 AUTHENTICATION_REQUIRED -> HttpStatus.UNAUTHORIZED;
+                 AUTHENTICATION_REQUIRED
+                    -> HttpStatus.UNAUTHORIZED;
 
-            case ACCESS_DENIED -> HttpStatus.FORBIDDEN;
+            case ACCESS_DENIED
+                    -> HttpStatus.FORBIDDEN;
 
             case USER_MUST_HAVE_AT_LEAST_ONE_ROLE,
                  VALIDATION_FAILED,
-                 MALFORMED_REQUEST -> HttpStatus.BAD_REQUEST;
+                 MALFORMED_REQUEST
+                    -> HttpStatus.BAD_REQUEST;
 
-            case INTERNAL_SERVER_ERROR ->
-                    HttpStatus.INTERNAL_SERVER_ERROR;
+            case INTERNAL_SERVER_ERROR
+                    -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }
 

@@ -95,6 +95,39 @@ public class SecurityConfig {
                                 "/api/v1/users/**"
                         ).hasRole("ADMIN")
 
+                        .requestMatchers(
+                                HttpMethod.GET,
+                                "/api/v1/warehouses/**"
+                        ).hasAnyRole(
+                                "ADMIN",
+                                "WAREHOUSE_MANAGER",
+                                "WAREHOUSE_WORKER"
+                        )
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/v1/warehouses/**"
+                        ).hasAnyRole(
+                                "ADMIN",
+                                "WAREHOUSE_MANAGER"
+                        )
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/v1/warehouses/**"
+                        ).hasAnyRole(
+                                "ADMIN",
+                                "WAREHOUSE_MANAGER"
+                        )
+
+                        .requestMatchers(
+                                HttpMethod.PATCH,
+                                "/api/v1/warehouses/**"
+                        ).hasAnyRole(
+                                "ADMIN",
+                                "WAREHOUSE_MANAGER"
+                        )
+
                         .anyRequest().authenticated()
                 )
 
